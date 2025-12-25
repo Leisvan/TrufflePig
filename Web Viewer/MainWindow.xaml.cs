@@ -1,25 +1,37 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
+using LCTWorks.WinUI.Extensions;
+using LCTWorks.WinUI.Helpers;
+using Microsoft.UI.Dispatching;
 using Microsoft.UI.Xaml;
-using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Controls.Primitives;
-using Microsoft.UI.Xaml.Data;
-using Microsoft.UI.Xaml.Input;
-using Microsoft.UI.Xaml.Media;
-using Microsoft.UI.Xaml.Navigation;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using WinUIEx;
+using System;
+using System.IO;
+using Windows.UI.ViewManagement;
 
 namespace WebViewer;
 
 public sealed partial class MainWindow : Window
 {
+    private readonly DispatcherQueue _dispatcherQueue;
+
+    private readonly UISettings _settings;
+
     public MainWindow()
     {
         InitializeComponent();
+
+        AppWindow.SetIcon(Path.Combine(AppContext.BaseDirectory, "Assets/WindowIcon.ico"));
+        Content = null;
+        Title = "AppDisplayName".GetTextLocalized();
+
+        _dispatcherQueue = DispatcherQueue.GetForCurrentThread();
+        _settings = new UISettings();
+        _settings.ColorValuesChanged += SettingsColorValuesChanged;
+    }
+
+    private void SettingsColorValuesChanged(UISettings sender, object args)
+    {
+        _dispatcherQueue.TryEnqueue(() =>
+        {
+            TitleBarHelper.ApplySystemThemeToCaptionButtons();
+        });
     }
 }

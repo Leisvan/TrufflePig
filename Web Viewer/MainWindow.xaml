@@ -12,6 +12,4 @@
     <Window.SystemBackdrop>
         <media:MicaBackdrop Kind="BaseAlt" />
     </Window.SystemBackdrop>
-
-    <Grid />
 </Window>
