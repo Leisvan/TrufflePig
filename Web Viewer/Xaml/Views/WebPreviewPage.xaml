@@ -1,14 +1,110 @@
-<Page x:Class="WebViewer.Xaml.Views.WebPreviewPage"
+﻿<Page x:Class="WebViewer.Xaml.Views.WebPreviewPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:xaml="using:WebViewer.Xaml"
       mc:Ignorable="d">
+    <Page.Resources>
+        <Style TargetType="FontIcon">
+            <Setter Property="FontFamily"
+                    Value="{StaticResource FluentIconsFontFamily}" />
+            <Setter Property="FontSize"
+                    Value="16" />
+        </Style>
 
-    <Grid HorizontalAlignment="Stretch"
-          VerticalAlignment="Stretch">
-        <TextBlock HorizontalAlignment="Center"
-                   VerticalAlignment="Center"
-                   Text="WebPreviewPage" />
+        <Style BasedOn="{StaticResource DefaultAppBarButtonStyle}"
+               TargetType="AppBarButton">
+            <Setter Property="Width"
+                    Value="48" />
+        </Style>
+    </Page.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid Padding="4">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <CommandBar OverflowButtonVisibility="Collapsed">
+                <AppBarButton Command="{x:Bind ViewModel.GoBackCommand}"
+                              Icon="Back"
+                              IsEnabled="{x:Bind ViewModel.CanGoBack, Mode=OneWay}" />
+                <AppBarButton Command="{x:Bind ViewModel.GoForwardCommand}"
+                              Icon="Forward"
+                              Visibility="{x:Bind ViewModel.CanGoForward, Mode=OneWay}" />
+                <AppBarButton Width="48"
+                              Icon="Refresh" />
+            </CommandBar>
+
+            <Grid Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+
+                <AutoSuggestBox x:Uid="WebPreview_UrlBox"
+                                Grid.ColumnSpan="3"
+                                VerticalAlignment="Center"
+                                BorderThickness="0"
+                                CornerRadius="16"
+                                IsEnabled="{x:Bind ViewModel.IsNavigationEnabled, Mode=OneWay}"
+                                QueryIcon="Forward"
+                                QuerySubmitted="{x:Bind ViewModel.UriTextBoxQuerySubmitted}"
+                                Text="{x:Bind ViewModel.UriText, Mode=TwoWay}">
+                    <AutoSuggestBox.Resources>
+                        <Thickness x:Key="TextControlBorderThemeThicknessFocused">0</Thickness>
+                        <Thickness x:Key="TextControlThemePadding">72,5,24,5</Thickness>
+                    </AutoSuggestBox.Resources>
+                </AutoSuggestBox>
+                <FontIcon Margin="12,0"
+                          HorizontalAlignment="Left"
+                          VerticalAlignment="Center"
+                          FontFamily="{StaticResource FluentIconsFontFamily}"
+                          Glyph="{x:Bind xaml:Adapters.GetSecurityStateGlyph(ViewModel.SecurityState), Mode=OneWay}" />
+                <Image Grid.Column="1"
+                       Height="16"
+                       Source="{x:Bind ViewModel.FavIconUri, Mode=OneWay}" />
+            </Grid>
+
+            <CommandBar Grid.Column="2"
+                        OverflowButtonVisibility="Collapsed">
+                <AppBarToggleButton Width="48"
+                                    Icon="Mute"
+                                    IsChecked="{x:Bind ViewModel.IsMuted, Mode=TwoWay}"
+                                    Visibility="{x:Bind ViewModel.IsPlayingAudio, Mode=OneWay}" />
+                <AppBarButton>
+                    <FontIcon Glyph="&#xE8A7;" />
+                </AppBarButton>
+                <AppBarButton>
+                    <FontIcon Glyph="&#xEC7A;" />
+                </AppBarButton>
+                <AppBarButton>
+                    <FontIcon Glyph="&#xF8A5;" />
+                </AppBarButton>
+                <AppBarButton>
+                    <FontIcon Glyph="&#xE713;" />
+                </AppBarButton>
+            </CommandBar>
+        </Grid>
+        <Grid Grid.Row="1"
+              Margin="8"
+              HorizontalAlignment="Stretch"
+              VerticalAlignment="Stretch">
+            <WebView2 x:Name="WebView"
+                      Source="{x:Bind ViewModel.UriSource, Mode=TwoWay}" />
+            <ProgressBar x:Name="LoadingBar"
+                         HorizontalAlignment="Stretch"
+                         VerticalAlignment="Top"
+                         x:Load="{x:Bind ViewModel.IsNavigating, Mode=OneWay}"
+                         IsIndeterminate="True" />
+        </Grid>
     </Grid>
 </Page>

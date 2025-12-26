@@ -36,8 +36,6 @@ public partial class App : Application, IAppExtended
            .AddSingleton<FrameNavigationService>()
            .AddSentry(string.Empty, RuntimePackageHelper.Environment, RuntimePackageHelper.IsDebug(), RuntimePackageHelper.GetTelemetryContextData())
 
-           //Database and Repositories
-
            //ViewModels
            .AddSingleton<ShellViewModel>()
            .AddTransient<WebPreviewViewModel>()

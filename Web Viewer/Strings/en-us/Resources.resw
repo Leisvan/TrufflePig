@@ -120,4 +120,7 @@
   <data name="AppDisplayName" xml:space="preserve">
     <value>WebViewer</value>
   </data>
+  <data name="WebPreview_UrlBox.PlaceholderText" xml:space="preserve">
+    <value>Search or enter web address</value>
+  </data>
 </root>
