@@ -9,6 +9,7 @@ using Microsoft.Web.WebView2.Core;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using TrufflePig.Helpers;
 using TrufflePig.Models;
 using TrufflePig.Services;
 
@@ -16,7 +17,6 @@ namespace TrufflePig.ViewModels;
 
 public partial class WebPreviewViewModel(NavigationHistoryService navigationHistoryService) : ObservableObject
 {
-    private const string DefaultFavIconUri = "ms-appx:///Assets/Images/DefaultSiteIcon.png";
     private readonly NavigationHistoryService _navigationHistoryService = navigationHistoryService;
     private string? _pendingNavigationUrl;
     private WebView2? _webView;
@@ -28,7 +28,7 @@ public partial class WebPreviewViewModel(NavigationHistoryService navigationHist
     public partial bool CanGoForward { get; set; }
 
     [ObservableProperty]
-    public partial string FavIconUri { get; set; } = DefaultFavIconUri;
+    public partial string FavIconUri { get; set; } = Constants.DefaultFavIconUri;
 
     public bool? IsMuted
     {
@@ -127,6 +127,7 @@ public partial class WebPreviewViewModel(NavigationHistoryService navigationHist
         if (args.Reason == AutoSuggestionBoxTextChangeReason.UserInput)
         {
             var suggestions = _navigationHistoryService.Search(sender.Text);
+
             // Check if suggestions have changed before updating
             if (!AreSuggestionsEqual(SuggestedRecords, suggestions))
             {
@@ -184,7 +185,7 @@ public partial class WebPreviewViewModel(NavigationHistoryService navigationHist
         if (_pendingNavigationUrl != null && args.IsSuccess)
         {
             var title = sender.DocumentTitle ?? string.Empty;
-            var favIconUri = FavIconUri != DefaultFavIconUri ? FavIconUri : string.Empty;
+            var favIconUri = FavIconUri != Constants.DefaultFavIconUri ? FavIconUri : string.Empty;
             _navigationHistoryService.AddOrUpdateItem(_pendingNavigationUrl, favIconUri, title);
             _pendingNavigationUrl = null;
         }

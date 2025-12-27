@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TrufflePig.Helpers;
 using TrufflePig.Models;
 
 namespace TrufflePig.Services;
@@ -76,6 +77,13 @@ public class NavigationHistoryService
     private void LoadHistory()
     {
         _records = LocalSettingsHelper.ReadSetting<List<NavigationRecord>>(NavigationHistoryKey) ?? [];
+        foreach (var record in _records)
+        {
+            if (string.IsNullOrWhiteSpace(record.FavIconUri))
+            {
+                record.FavIconUri = Constants.DefaultFavIconUri;
+            }
+        }
     }
 
     private void SaveHistory()

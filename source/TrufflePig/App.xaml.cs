@@ -9,6 +9,7 @@ using Microsoft.UI.Xaml;
 using System;
 using System.Security;
 using System.Threading.Tasks;
+using TrufflePig.Helpers;
 using TrufflePig.Services;
 using TrufflePig.ViewModels;
 using TrufflePig.Xaml.Views;

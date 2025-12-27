@@ -112,16 +112,16 @@
                                     Icon="Mute"
                                     IsChecked="{x:Bind ViewModel.IsMuted, Mode=TwoWay}"
                                     Visibility="{x:Bind ViewModel.IsPlayingAudio, Mode=OneWay}" />
-                <AppBarButton>
+                <AppBarButton IsEnabled="False">
                     <FontIcon Glyph="&#xE8A7;" />
                 </AppBarButton>
-                <AppBarButton>
+                <AppBarButton IsEnabled="False">
                     <FontIcon Glyph="&#xEC7A;" />
                 </AppBarButton>
-                <AppBarButton>
+                <AppBarButton IsEnabled="False">
                     <FontIcon Glyph="&#xF8A5;" />
                 </AppBarButton>
-                <AppBarButton>
+                <AppBarButton IsEnabled="False">
                     <FontIcon Glyph="&#xE713;" />
                 </AppBarButton>
             </CommandBar>
