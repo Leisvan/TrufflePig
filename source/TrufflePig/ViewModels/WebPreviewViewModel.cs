@@ -1,6 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LCTWorks.Core.Extensions;
+using LCTWorks.Web;
+using LCTWorks.Web.Extensions;
 using LCTWorks.WinUI.Extensions;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.Web.WebView2.Core;
@@ -99,8 +101,7 @@ public partial class WebPreviewViewModel(NavigationHistoryService navigationHist
             return;
         }
 
-        var uri = input.BuildValidUri();
-        if (uri != null)
+        if (new UriString(input, false).TryCreateUri(out var uri))
         {
             _pendingNavigationUrl = uri.ToString();
             UriSource = uri;
@@ -172,8 +173,8 @@ public partial class WebPreviewViewModel(NavigationHistoryService navigationHist
         }
         if (FavIconUri != sender.FaviconUri)
         {
-            var uri = sender.FaviconUri.BuildValidUri();
-            if (uri != null && uri.IsImageUri())
+            var uri = new UriString(sender.FaviconUri);
+            if (uri.IsValid && uri.IsImageFromExtension())
             {
                 FavIconUri = sender.FaviconUri;
             }
