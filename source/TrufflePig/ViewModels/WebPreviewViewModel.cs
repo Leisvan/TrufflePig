@@ -9,9 +9,11 @@ using Microsoft.Web.WebView2.Core;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using TrufflePig.Helpers;
 using TrufflePig.Models;
 using TrufflePig.Services;
+using Windows.System;
 
 namespace TrufflePig.ViewModels;
 
@@ -30,19 +32,16 @@ public partial class WebPreviewViewModel(NavigationHistoryService navigationHist
     [ObservableProperty]
     public partial string FavIconUri { get; set; } = Constants.DefaultFavIconUri;
 
-    public bool? IsMuted
+    public bool IsMuted
     {
         get => _webView?.CoreWebView2?.IsMuted ?? false;
         set
         {
-            if (value == null)
-            {
-                return;
-            }
             if (_webView?.CoreWebView2 != null)
             {
-                _webView.CoreWebView2.IsMuted = value.Value;
+                _webView.CoreWebView2.IsMuted = value;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(IsNotMuted));
             }
         }
     }
@@ -52,6 +51,8 @@ public partial class WebPreviewViewModel(NavigationHistoryService navigationHist
     public partial bool IsNavigating { get; set; }
 
     public bool IsNavigationEnabled => !IsNavigating;
+
+    public bool IsNotMuted => !IsMuted;
 
     [ObservableProperty]
     public partial bool IsPlayingAudio { get; set; }
@@ -225,6 +226,24 @@ public partial class WebPreviewViewModel(NavigationHistoryService navigationHist
     }
 
     [RelayCommand]
+    private async Task OpenInExternalBrowser()
+    {
+        if (UriSource != null)
+        {
+            await Launcher.LaunchUriAsync(UriSource);
+        }
+    }
+
+    [RelayCommand]
+    private void OpenWebViewDevToolsWindow()
+    {
+        if (_webView?.CoreWebView2 != null)
+        {
+            _webView.CoreWebView2.OpenDevToolsWindow();
+        }
+    }
+
+    [RelayCommand]
     private void Refresh()
     {
         if (_webView?.CoreWebView2 != null)
@@ -233,6 +252,9 @@ public partial class WebPreviewViewModel(NavigationHistoryService navigationHist
             _webView.CoreWebView2.Reload();
         }
     }
+
+    [RelayCommand]
+    private void ToggleMute() => IsMuted = !IsMuted;
 
     private void UpdateNavigationState()
     {

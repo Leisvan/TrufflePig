@@ -123,6 +123,12 @@
   <data name="AppDisplayName" xml:space="preserve">
     <value>Truffle Pig</value>
   </data>
+  <data name="BrowserCommand-OpenDevToolsWindowButton.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>Open DevTools Window</value>
+  </data>
+  <data name="BrowserCommand-OpenInExternalBrowserButton.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>Open in external browser</value>
+  </data>
   <data name="WebPreview_UrlBox.PlaceholderText" xml:space="preserve">
     <value>Search or enter web address</value>
   </data>

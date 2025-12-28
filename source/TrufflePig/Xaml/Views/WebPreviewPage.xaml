@@ -2,16 +2,45 @@
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:icon="using:FluentIcons.WinUI"
+      xmlns:iconx="using:FluentIcons.WinUI.Markup"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:models="using:TrufflePig.Models"
       xmlns:xaml="using:TrufflePig.Xaml"
       mc:Ignorable="d">
     <Page.Resources>
+        <SolidColorBrush x:Key="ButtonBackgroundDisabled"
+                         Color="Transparent" />
         <Style TargetType="FontIcon">
             <Setter Property="FontFamily"
                     Value="{StaticResource FluentIconsFontFamily}" />
             <Setter Property="FontSize"
                     Value="16" />
+        </Style>
+        <Style TargetType="icon:SymbolIcon">
+            <Setter Property="HorizontalAlignment"
+                    Value="Center" />
+            <Setter Property="VerticalAlignment"
+                    Value="Center" />
+            <Setter Property="FontSize"
+                    Value="18" />
+            <Setter Property="IconVariant"
+                    Value="Regular" />
+        </Style>
+
+        <Style x:Key="BarButtonStyle"
+               BasedOn="{StaticResource DefaultButtonStyle}"
+               TargetType="Button">
+            <Setter Property="HorizontalAlignment"
+                    Value="Center" />
+            <Setter Property="VerticalAlignment"
+                    Value="Center" />
+            <Setter Property="Padding"
+                    Value="8" />
+            <Setter Property="Background"
+                    Value="Transparent" />
+            <Setter Property="BorderThickness"
+                    Value="0" />
         </Style>
 
         <Style BasedOn="{StaticResource DefaultAppBarButtonStyle}"
@@ -33,17 +62,22 @@
                 <ColumnDefinition />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <CommandBar OverflowButtonVisibility="Collapsed">
-                <AppBarButton Command="{x:Bind ViewModel.GoBackCommand}"
-                              Icon="Back"
-                              IsEnabled="{x:Bind ViewModel.CanGoBack, Mode=OneWay}" />
-                <AppBarButton Command="{x:Bind ViewModel.GoForwardCommand}"
-                              Icon="Forward"
-                              Visibility="{x:Bind ViewModel.CanGoForward, Mode=OneWay}" />
-                <AppBarButton Width="48"
-                              Command="{x:Bind ViewModel.RefreshCommand, Mode=OneWay}"
-                              Icon="Refresh" />
-            </CommandBar>
+            <Grid.Resources>
+                <Style BasedOn="{StaticResource BarButtonStyle}"
+                       TargetType="Button" />
+            </Grid.Resources>
+            <StackPanel Margin="8,0"
+                        Orientation="Horizontal"
+                        Spacing="4">
+                <Button Command="{x:Bind ViewModel.GoBackCommand}"
+                        Content="{iconx:SymbolIcon Symbol=ArrowLeft}"
+                        IsEnabled="{x:Bind ViewModel.CanGoBack, Mode=OneWay}" />
+                <Button Command="{x:Bind ViewModel.GoForwardCommand}"
+                        Content="{iconx:SymbolIcon Symbol=ArrowRight}"
+                        Visibility="{x:Bind ViewModel.CanGoForward, Mode=OneWay}" />
+                <Button Command="{x:Bind ViewModel.RefreshCommand}"
+                        Content="{iconx:SymbolIcon Symbol=ArrowClockwise}" />
+            </StackPanel>
 
             <Grid Grid.Column="1">
                 <Grid.ColumnDefinitions>
@@ -96,35 +130,45 @@
                         </DataTemplate>
                     </AutoSuggestBox.ItemTemplate>
                 </AutoSuggestBox>
-                <FontIcon Margin="12,0"
-                          HorizontalAlignment="Left"
-                          VerticalAlignment="Center"
-                          FontFamily="{StaticResource FluentIconsFontFamily}"
-                          Glyph="{x:Bind xaml:Adapters.GetSecurityStateGlyph(ViewModel.SecurityState), Mode=OneWay}" />
+                <icon:FluentIcon Margin="12,0"
+                                 HorizontalAlignment="Center"
+                                 VerticalAlignment="Center"
+                                 Icon="{x:Bind xaml:Adapters.GetSecurityStateIcon(ViewModel.SecurityState), Mode=OneWay}"
+                                 IconSize="Size16"
+                                 IconVariant="Regular" />
                 <Image Grid.Column="1"
                        Height="16"
                        Source="{x:Bind ViewModel.FavIconUri, Mode=OneWay}" />
             </Grid>
 
-            <CommandBar Grid.Column="2"
-                        OverflowButtonVisibility="Collapsed">
-                <AppBarToggleButton Width="48"
-                                    Icon="Mute"
-                                    IsChecked="{x:Bind ViewModel.IsMuted, Mode=TwoWay}"
-                                    Visibility="{x:Bind ViewModel.IsPlayingAudio, Mode=OneWay}" />
-                <AppBarButton IsEnabled="False">
-                    <FontIcon Glyph="&#xE8A7;" />
-                </AppBarButton>
-                <AppBarButton IsEnabled="False">
-                    <FontIcon Glyph="&#xEC7A;" />
-                </AppBarButton>
-                <AppBarButton IsEnabled="False">
-                    <FontIcon Glyph="&#xF8A5;" />
-                </AppBarButton>
-                <AppBarButton IsEnabled="False">
-                    <FontIcon Glyph="&#xE713;" />
-                </AppBarButton>
-            </CommandBar>
+            <StackPanel Grid.Column="2"
+                        Margin="8,0"
+                        Orientation="Horizontal"
+                        Spacing="4">
+                <StackPanel Orientation="Horizontal"
+                            Spacing="4"
+                            Visibility="{x:Bind ViewModel.IsPlayingAudio, Mode=OneWay}">
+                    <Button Command="{x:Bind ViewModel.ToggleMuteCommand, Mode=OneWay}"
+                            Content="{iconx:SymbolIcon Symbol=Speaker2}"
+                            Visibility="{x:Bind ViewModel.IsNotMuted, Mode=OneWay}" />
+                    <Button Command="{x:Bind ViewModel.ToggleMuteCommand, Mode=OneWay}"
+                            Content="{iconx:SymbolIcon Symbol=SpeakerOff}"
+                            Visibility="{x:Bind ViewModel.IsMuted, Mode=OneWay}" />
+                </StackPanel>
+                <Button x:Uid="BrowserCommand-OpenInExternalBrowserButton"
+                        Command="{x:Bind ViewModel.OpenInExternalBrowserCommand, Mode=OneWay}">
+                    <FontIcon FontFamily="{StaticResource FontAwesomeBrandsFontFamily}"
+                              Glyph="edge" />
+                </Button>
+                <Button x:Uid="BrowserCommand-OpenDevToolsWindowButton"
+                        Command="{x:Bind ViewModel.OpenWebViewDevToolsWindowCommand, Mode=OneWay}"
+                        Content="{iconx:SymbolIcon Symbol=WindowDevTools}" />
+                <Button Content="{iconx:SymbolIcon Symbol=SearchSparkle,
+                                                   IconVariant=Color}"
+                        IsEnabled="False" />
+                <Button Content="{iconx:SymbolIcon Symbol=Settings}"
+                        IsEnabled="False" />
+            </StackPanel>
         </Grid>
         <Grid Grid.Row="1"
               Margin="8"
