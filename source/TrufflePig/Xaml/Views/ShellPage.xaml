@@ -23,9 +23,12 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <Image x:Name="TitleBarIcon"
-                   Width="16"
-                   Height="16"
-                   HorizontalAlignment="Left" />
+                   Width="20"
+                   Height="20"
+                   Margin="16,0,0,0"
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Center"
+                   Source="/Assets/Square44x44Logo.png" />
             <TextBlock x:Name="AppTitleBarText"
                        Grid.Column="1"
                        VerticalAlignment="Center"
