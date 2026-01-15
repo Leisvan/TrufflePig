@@ -4,21 +4,7 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
-  <Folder Name="/submodules/">
-    <Project Path="submodules/LCTWorks-Toolkit/LCTWorks.Core/LCTWorks.Core.csproj">
-      <Platform Solution="*|x64" Project="x64" />
-      <Platform Solution="*|x86" Project="x86" />
-    </Project>
-    <Project Path="submodules/LCTWorks-Toolkit/LCTWorks.Telemetry/LCTWorks.Telemetry.csproj">
-      <Platform Solution="*|x64" Project="x64" />
-      <Platform Solution="*|x86" Project="x86" />
-    </Project>
-    <Project Path="submodules/LCTWorks-Toolkit/LCTWorks.Web/LCTWorks.Web.csproj" />
-    <Project Path="submodules/LCTWorks-Toolkit/LCTWorks.WinUI/LCTWorks.WinUI.csproj">
-      <Platform Solution="*|x64" Project="x64" />
-      <Platform Solution="*|x86" Project="x86" />
-    </Project>
-  </Folder>
+  <Folder Name="/submodules/" />
   <Project Path="TrufflePig/TrufflePig.csproj">
     <Platform Solution="*|ARM64" Project="ARM64" />
     <Platform Solution="*|x64" Project="x64" />
